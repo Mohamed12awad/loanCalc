@@ -51,7 +51,7 @@ function calculatePMT(event) {
   }
 
   //editing value of interst
-  if (loanAmount < 50000) {
+  if (loanAmount <= 50000) {
     // loanLeaked.checked = false;
     loanLeaked.disabled = false;
     // loanRenew.checked = false;
