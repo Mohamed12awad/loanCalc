@@ -1,9 +1,24 @@
 // Interest Values
 let interestValue = {
-  micro: [49, 49, 49, 40.5, 37.5, 36, 35],
-  microRenew: [47, 47],
+  micro: [
+    49, //from 0 to 9,500
+    49, //from 10,000 to 50,000
+    49, // from 51,000 to 100,000
+    40.5, // from 101,000 to 200,000
+    37.5, //from 201,000 to 500,00
+    36, //from 501,000 to 1,000,000
+    35, // 1,000,000 and above
+  ],
+  microRenew: [
+    47, //from 0 to 9,500
+    47, //from 10,000 to 50,000
+  ],
   microLecked: [45],
-  consume: [49, 45, 34.7],
+  consume: [
+    49, // from outsider sellers
+    45, // from halan app
+    34.7, // loan for employees
+  ],
 };
 
 function calculatePMT(event) {
