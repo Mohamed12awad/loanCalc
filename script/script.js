@@ -23,25 +23,58 @@ let interestValue = {
     34.7, // loan for employees
   ],
 };
+// const slider = document.getElementById("slider");
 document.querySelector(".state-consume").style.height = "0";
 document.querySelector(".state-consume").style.opacity = "0";
 
+let loanRenew = document.getElementById("loan-renewal");
+let loanLeaked = document.getElementById("loan-leaked");
+let loanHalan = document.getElementById("loan-halan");
+let loanEmployee = document.getElementById("loan-employee");
+let interestRate;
+
+// synchronizes number input with range input
+let loanAmount = document.getElementById("loan-amount");
+var term = document.getElementById("term");
+var amountSlider = document.getElementById("amount-slider");
+var monthSlider = document.getElementById("months-slider");
+
+loanAmount.addEventListener("input", () => {
+  amountSlider.value = loanAmount.value;
+});
+amountSlider.addEventListener("input", () => {
+  loanAmount.value = amountSlider.value;
+});
+
+term.addEventListener("input", () => {
+  monthSlider.value = term.value;
+});
+monthSlider.addEventListener("input", () => {
+  term.value = monthSlider.value;
+});
+
+//editing range max value
+let loanType = document.getElementById("loan-type");
+loanType.addEventListener("input", () => {
+  if (loanType.value === "small") {
+    amountSlider.setAttribute("min", "250000");
+    amountSlider.setAttribute("max", "5000000");
+    amountSlider.setAttribute("step", "10000");
+  } else {
+    amountSlider.setAttribute("min", "3000");
+    amountSlider.setAttribute("max", "200000");
+    amountSlider.setAttribute("step", "1000");
+  }
+});
+
+// start calculate function
 function calculatePMT(event) {
   event.preventDefault(); // Prevent form submission
 
   // Get input values
   let loanType = document.getElementById("loan-type").value;
   let loanAmount = parseFloat(document.getElementById("loan-amount").value);
-  let interestRate;
-  let loanRenew = document.getElementById("loan-renewal");
-  let loanLeaked = document.getElementById("loan-leaked");
-
-  let loanHalan = document.getElementById("loan-halan");
-  let loanEmployee = document.getElementById("loan-employee");
   var term = parseInt(document.getElementById("term").value);
-
-  //   var resultEl = document.getElementById("loan-type2");
-  //   resultEl.textContent = loanType;
 
   //editing value of interst
 
@@ -53,6 +86,14 @@ function calculatePMT(event) {
     document.querySelector(".state-micro").style.opacity = "0";
     document.querySelector(".state-consume").style.height = "auto";
     document.querySelector(".state-consume").style.opacity = "100";
+  } else if (loanType === "small") {
+    document.querySelector(".fees").style.display = "block";
+    document.querySelector(".total").style.display = "block";
+    document.querySelector(".pmt").style.gridColumn = "1/2";
+    document.querySelector(".state-micro").style.height = "0";
+    document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-consume").style.height = "0";
+    document.querySelector(".state-consume").style.opacity = "0";
   } else {
     document.querySelector(".fees").style.display = "block";
     document.querySelector(".total").style.display = "block";
@@ -155,13 +196,9 @@ function calculatePMT(event) {
 // function calculateRate(interestRate){
 
 // }
+
 function calculatePayment(loanAmount, interestRate, term) {
   let loanType = document.getElementById("loan-type").value;
-  let loanRenew = document.getElementById("loan-renewal");
-  let loanLeaked = document.getElementById("loan-leaked");
-  let loanHalan = document.getElementById("loan-halan");
-  let loanEmployee = document.getElementById("loan-employee");
-
   if (loanType == "consume") {
     if (loanHalan.checked) {
       interestRate = interestValue.consume[1];
@@ -171,7 +208,7 @@ function calculatePayment(loanAmount, interestRate, term) {
       interestRate = interestValue.consume[0];
     }
     // calcualte loan if micro
-  } else if (loanType == "micro") {
+  } else if (loanType == "micro" || loanType == "small") {
     if (loanRenew.checked && loanAmount <= 50000) {
       interestRate = interestValue.microRenew[0];
     } else if (loanLeaked.checked && loanAmount <= 50000) {

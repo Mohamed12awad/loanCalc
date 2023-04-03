@@ -15,7 +15,7 @@
     <nav class="nav">
       <div class="container d-flex justify-content-between my-2">
         <h1 class="fw-bold my-auto">مبلغ الأقساط</h1>
-        <div>
+        <div class="nav-logo">
           <img src="imgs/tasaheel-logo@3x.png" alt="tasaheel logo" />
         </div>
       </div>
@@ -31,14 +31,15 @@
               name="loan-type"
               id="loan-type"
             >
-              <option value="micro">تمويل المشروعات</option>
-              <!-- <option value="small">صغيرة ومتوسطة</option> -->
+              <option value="micro">متناهى الصغر</option>
+              <option value="small">صغيرة ومتوسطة</option>
               <option value="consume">استهلاكى</option>
             </select>
             <p id="loan-type2"></p>
 
             <label class="fs-5" for="loan-amount">مبلغ التمويل</label>
             <input
+              class="w-50 rounded-4 mb-2 form-control form-control-sm"
               type="number"
               id="loan-amount"
               name="loan-amount"
@@ -47,16 +48,35 @@
               max="5000000"
               required
             />
-
-            <label class="fs-5" for="term">مدة القرض ( بالشهر )</label>
             <input
+              title="00"
+              type="range"
+              min="3000"
+              step="1000"
+              max="200000"
+              class="slider form-range"
+              id="amount-slider"
+            />
+
+            <label class="fs-5 mt-3" for="term">مدة القرض ( بالشهر )</label>
+            <input
+              class="w-50 rounded-4 mb-2 form-control form-control-sm"
               type="number"
               id="term"
               name="term"
-              min="0"
+              min="1"
               step="1"
               value="12"
               required
+            />
+            <input
+              title="00"
+              type="range"
+              min="1"
+              max="36"
+              value="12"
+              class="slider form-range"
+              id="months-slider"
             />
 
             <!-- changing the state of a micro loan renew or leaked client -->
@@ -139,7 +159,7 @@
       <div class="notes mt-3 fw-semibold">
         <span class="fs-5">ملاحظات:</span>
         <ol class="mt-3 fs-6">
-          <li>يوجد رسوم استعلام اضافية = 12 جنيهات لكل فرد</li>
+          <li>يوجد رسوم استعلام اضافية = 12 جنيه لكل فرد "عميل او ضامن"</li>
           <li>عرض التجديد يتم فى خلال 7 ايام من انتهاء القرض السابق</li>
           <li>العرض الخاص حتى 50,000 جنيه فقط</li>
           <li>العرض الخاص يتم احتسابه بعد 60 يوم من انتهاء القرض السابق</li>
