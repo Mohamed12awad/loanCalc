@@ -10,16 +10,21 @@ let interestValue = {
     35, // 1,000,000 and above
   ],
   microRenew: [
+    // for clients who will renew in 7 days of old loan
     47, //from 0 to 9,500
     47, //from 10,000 to 50,000
   ],
-  microLecked: [45],
+  microLecked: [
+    45, // for leaked client who did not renew in 60 days
+  ],
   consume: [
     49, // from outsider sellers
     45, // from halan app
     34.7, // loan for employees
   ],
 };
+document.querySelector(".state-consume").style.height = "0";
+document.querySelector(".state-consume").style.opacity = "0";
 
 function calculatePMT(event) {
   event.preventDefault(); // Prevent form submission
@@ -31,6 +36,8 @@ function calculatePMT(event) {
   let loanRenew = document.getElementById("loan-renewal");
   let loanLeaked = document.getElementById("loan-leaked");
 
+  let loanHalan = document.getElementById("loan-halan");
+  let loanEmployee = document.getElementById("loan-employee");
   var term = parseInt(document.getElementById("term").value);
 
   //   var resultEl = document.getElementById("loan-type2");
@@ -42,12 +49,18 @@ function calculatePMT(event) {
     document.querySelector(".fees").style.display = "none";
     document.querySelector(".total").style.display = "none";
     document.querySelector(".pmt").style.gridColumn = "1/3";
-    document.querySelector(".state").style.opacity = "0";
+    document.querySelector(".state-micro").style.height = "0";
+    document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-consume").style.height = "auto";
+    document.querySelector(".state-consume").style.opacity = "100";
   } else {
     document.querySelector(".fees").style.display = "block";
     document.querySelector(".total").style.display = "block";
     document.querySelector(".pmt").style.gridColumn = "1/2";
-    document.querySelector(".state").style.opacity = "100";
+    document.querySelector(".state-micro").style.height = "auto";
+    document.querySelector(".state-micro").style.opacity = "100";
+    document.querySelector(".state-consume").style.height = "0";
+    document.querySelector(".state-consume").style.opacity = "0";
   }
 
   // Calculate PMT
@@ -75,17 +88,23 @@ function calculatePMT(event) {
     loanLeaked.disabled = true;
     loanRenew.disabled = true;
   }
-
+  // disable input value to remove double check
   if (loanRenew.checked) {
     loanLeaked.checked = false;
     loanLeaked.attributes.disabled;
-
-    // loanRenew.addEventListener("click", (loanLeaked.checked = false));
   } else if (loanLeaked.checked) {
     loanRenew.checked = false;
     loanRenew.attributes.disabled;
-    // loanLeaked.addEventListener("click", (loanRenew.checked = false));
   }
+
+  if (loanHalan.checked) {
+    loanEmployee.checked = false;
+    loanEmployee.attributes.disabled;
+  } else if (loanEmployee.checked) {
+    loanHalan.checked = false;
+    loanHalan.attributes.disabled;
+  }
+
   var fees = loanAmount * feesPercentage;
   // Calculate Fixed interst
   var totalInterst = pmt.toFixed(0) * term - loanAmount;
@@ -140,13 +159,22 @@ function calculatePayment(loanAmount, interestRate, term) {
   let loanType = document.getElementById("loan-type").value;
   let loanRenew = document.getElementById("loan-renewal");
   let loanLeaked = document.getElementById("loan-leaked");
+  let loanHalan = document.getElementById("loan-halan");
+  let loanEmployee = document.getElementById("loan-employee");
+
   if (loanType == "consume") {
-    interestRate = interestValue.consume[0];
+    if (loanHalan.checked) {
+      interestRate = interestValue.consume[1];
+    } else if (loanEmployee.checked) {
+      interestRate = interestValue.consume[2];
+    } else {
+      interestRate = interestValue.consume[0];
+    }
     // calcualte loan if micro
   } else if (loanType == "micro") {
-    if (loanRenew.checked && loanAmount < 50000) {
+    if (loanRenew.checked && loanAmount <= 50000) {
       interestRate = interestValue.microRenew[0];
-    } else if (loanLeaked.checked && loanAmount < 50000) {
+    } else if (loanLeaked.checked && loanAmount <= 50000) {
       interestRate = interestValue.microLecked[0];
     } else {
       // console.log(interestValue);
