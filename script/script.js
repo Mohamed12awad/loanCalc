@@ -13,14 +13,18 @@ let interestValue = {
     // for clients who will renew in 7 days of old loan
     47, //from 0 to 9,500
     47, //from 10,000 to 50,000
+    47, //from 51,000 to 100,000
   ],
   microLecked: [
-    45, // for leaked client who did not renew in 60 days
+    // for leaked client who did not renew in 60 days
+    45, //from 0 to 9,500
+    45, //from 10,000 to 50,000
+    45, //from 51,000 to 100,000
   ],
   consume: [
-    49, // from outsider sellers
-    45, // from halan app
-    34.7, // loan for employees
+    52, // from outsider sellers
+    48, // from halan app
+    37.7, // loan for employees
   ],
 };
 // const slider = document.getElementById("slider");
@@ -58,7 +62,7 @@ let loanType = document.getElementById("loan-type");
 loanType.addEventListener("input", () => {
   if (loanType.value === "small") {
     amountSlider.setAttribute("min", "250000");
-    amountSlider.setAttribute("max", "5000000");
+    amountSlider.setAttribute("max", "2000000");
     amountSlider.setAttribute("step", "10000");
   } else {
     amountSlider.setAttribute("min", "3000");
@@ -120,7 +124,7 @@ function calculatePMT(event) {
   }
 
   //editing value of interst
-  if (loanAmount <= 50000) {
+  if (loanAmount <= 100000) {
     // loanLeaked.checked = false;
     loanLeaked.disabled = false;
     // loanRenew.checked = false;
@@ -209,9 +213,9 @@ function calculatePayment(loanAmount, interestRate, term) {
     }
     // calcualte loan if micro
   } else if (loanType == "micro" || loanType == "small") {
-    if (loanRenew.checked && loanAmount <= 50000) {
+    if (loanRenew.checked && loanAmount <= 100000) {
       interestRate = interestValue.microRenew[0];
-    } else if (loanLeaked.checked && loanAmount <= 50000) {
+    } else if (loanLeaked.checked && loanAmount <= 100000) {
       interestRate = interestValue.microLecked[0];
     } else {
       // console.log(interestValue);

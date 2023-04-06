@@ -1,7 +1,6 @@
 /* colors:
      #2d3590 blue
      #81bd41 green
-
 */
 @import url(https://fonts.googleapis.com/css?family=Poppins:400,700,300,500,600);
 * {
@@ -29,6 +28,10 @@ label {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
+}
+.form-select {
+  background-position: left 0.75rem center !important;
+  font-size: 18px;
 }
 input[type="number"] {
   padding: 10px;

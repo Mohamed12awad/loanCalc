@@ -26,7 +26,7 @@
           <form class="my-3" oninput="calculatePMT(event)">
             <label class="fs-5" for="loan-type">نوع منتج التمويل</label>
             <select
-              class="px-3 pt-1"
+              class="px-3 pt-1 form-select pe-3 w-50"
               title="loan type"
               name="loan-type"
               id="loan-type"
@@ -44,12 +44,12 @@
               id="loan-amount"
               name="loan-amount"
               min="0"
-              step="500"
-              max="5000000"
+              step="1000"
+              max="2000000"
               required
             />
             <input
-              title="00"
+              title="مبلغ التمويل الممنوح"
               type="range"
               min="3000"
               step="1000"
@@ -70,7 +70,7 @@
               required
             />
             <input
-              title="00"
+              title="عدد الاشهر"
               type="range"
               min="1"
               max="36"
@@ -161,8 +161,8 @@
         <ol class="mt-3 fs-6">
           <li>يوجد رسوم استعلام اضافية = 12 جنيه لكل فرد "عميل او ضامن"</li>
           <li>عرض التجديد يتم فى خلال 7 ايام من انتهاء القرض السابق</li>
-          <li>العرض الخاص حتى 50,000 جنيه فقط</li>
           <li>العرض الخاص يتم احتسابه بعد 60 يوم من انتهاء القرض السابق</li>
+          <li>العرض الخاص والتجديد حتى 100,000 جنيه فقط</li>
         </ol>
       </div>
       <hr />
