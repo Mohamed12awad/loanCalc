@@ -1,25 +1,27 @@
 // Interest Values
 let interestValue = {
   micro: [
-    49, //from 0 to 9,500
-    49, //from 10,000 to 50,000
-    49, // from 51,000 to 100,000
-    40.5, // from 101,000 to 200,000
-    37.5, //from 201,000 to 500,00
-    36, //from 501,000 to 1,000,000
-    35, // 1,000,000 and above
+    46, //from 0 to 9,500
+    46, //from 10,000 to 50,000
+    46, // from 51,000 to 100,000
+    37.5, // from 101,000 to 200,000
+    37.5, // from 201,000 to 500,00
+    36, // from 501,000 to 1,000,000
+    35, // from 1,001,000 to 1,500,000
+    34, // from 1,501,000 to 2,000,000
+    33, // 2,000,000 and above
   ],
   microRenew: [
     // for clients who will renew in 7 days of old loan
-    47, //from 0 to 9,500
-    47, //from 10,000 to 50,000
-    47, //from 51,000 to 100,000
+    46, //from 0 to 9,500
+    46, //from 10,000 to 50,000
+    46, //from 51,000 to 100,000
   ],
   microLecked: [
     // for leaked client who did not renew in 60 days
-    45, //from 0 to 9,500
-    45, //from 10,000 to 50,000
-    45, //from 51,000 to 100,000
+    46, //from 0 to 9,500
+    46, //from 10,000 to 50,000
+    46, //from 51,000 to 100,000
   ],
   consume: [
     52, // from outsider sellers
@@ -116,10 +118,10 @@ function calculatePMT(event) {
   if (loanType === "consume") {
     feesPercentage = 0;
   } else {
-    if (loanAmount > 200000) {
-      feesPercentage = 0.02; // fees for small & medium
+    if (loanAmount > 200000 || loanRenew.checked) {
+      feesPercentage = 0.015; // fees for small & medium
     } else {
-      feesPercentage = 0.015; // fees for micro
+      feesPercentage = 0.03; // fees for micro
     }
   }
 
@@ -159,44 +161,38 @@ function calculatePMT(event) {
 
   // Display result - قيمة القسط
   var resultEl = document.getElementById("result");
-  resultEl.textContent = numberFormatter.format(pmt.toFixed(0)) + " جنيه";
+  resultEl.textContent = isNaN(pmt)
+    ? "برجاء مراجعة البيانات"
+    : numberFormatter.format(pmt.toFixed(0)) + " جنيه";
 
   // حساب رسوم طلب القرض
   var resultFee = document.getElementById("fees");
-  resultFee.textContent = numberFormatter.format(Math.round(fees)) + " جنيه";
+  resultFee.textContent = isNaN(fees)
+    ? "برجاء مراجعة البيانات"
+    : numberFormatter.format(Math.round(fees)) + " جنيه";
 
   // حساب اجمالى مبلغ ما سيتحصل عليه العميل
   var resultTotal = document.getElementById("total");
-  resultTotal.textContent =
-    numberFormatter.format(loanAmount - Math.round(pmt + fees)) + " جنيه";
+  resultTotal.textContent = isNaN(loanAmount - Math.round(pmt + fees))
+    ? "برجاء مراجعة البيانات"
+    : numberFormatter.format(loanAmount - Math.round(pmt + fees)) + " جنيه";
 
   //  اجمالى مبلغ الفائدة الموزعة
   var resultInterst = document.getElementById("totalinterst");
-  resultInterst.textContent = numberFormatter.format(totalInterst) + " جنيه";
+  resultInterst.textContent = isNaN(totalInterst)
+    ? "برجاء مراجعة البيانات"
+    : numberFormatter.format(totalInterst) + " جنيه";
 
   // الاصل + الفائدة
   var resultPrinciplePlusInterst = document.getElementById(
     "principlePlusInterst"
   );
-  resultPrinciplePlusInterst.textContent =
-    numberFormatter.format(totalInterst + loanAmount) + " جنيه";
-
-  // making a slider insted of the maniual input //
-  // var slider = document.getElementById("loan-amount-range");
-  // var output = document.getElementById("demo");
-  // output.innerHTML = slider.value;
-
-  // slider.oninput = function () {
-  //   output.innerHTML = this.value.toLocaleString("en-US");
-  // };
-
-  // var resultFixedInterst = document.getElementById("fixedInterst");
-  // resultFixedInterst.textContent = fixedInterst.toFixed(2) + " %";
+  resultPrinciplePlusInterst.textContent = isNaN(totalInterst + loanAmount)
+    ? "برجاء مراجعة البيانات"
+    : numberFormatter.format(totalInterst + loanAmount) + " جنيه";
 }
-// if (loanRenew.checked == true) {
-//   console.log("yes yes");
-// }
 
+// isNaN(totalInterst) ? console.log("yes yes") : "";
 // function calculateRate(interestRate){
 
 // }
