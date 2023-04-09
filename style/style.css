@@ -69,6 +69,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="checkbox"] {
   width: 40px !important;
   height: 20px !important;
+  box-shadow: 1px 1px 4px -2px #81bd41;
 }
 .state-consume {
   z-index: 100;
