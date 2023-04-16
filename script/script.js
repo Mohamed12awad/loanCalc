@@ -134,6 +134,7 @@ function calculatePMT(event) {
   } else {
     loanLeaked.disabled = true;
     loanRenew.disabled = true;
+    loanRenew.checked = false;
   }
   // disable input value to remove double check
   if (loanRenew.checked) {
