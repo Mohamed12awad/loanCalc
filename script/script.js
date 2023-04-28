@@ -1,7 +1,7 @@
 // Interest Values
 let interestValue = {
   micro: [
-    46, //from 0 to 9,500
+    38.275, //from 0 to 9,500
     46, //from 10,000 to 50,000
     46, // from 51,000 to 100,000
     37.5, // from 101,000 to 200,000
@@ -120,16 +120,16 @@ function calculatePMT(event) {
   } else {
     if (loanAmount > 200000 || loanRenew.checked) {
       feesPercentage = 0.015; // fees for small & medium
+    } else if (loanAmount <= 10000) {
+      feesPercentage = 0.02;
     } else {
       feesPercentage = 0.03; // fees for micro
     }
   }
 
   //editing value of interst
-  if (loanAmount <= 100000) {
-    // loanLeaked.checked = false;
+  if (loanAmount <= 100000 && loanAmount > 10000) {
     loanLeaked.disabled = false;
-    // loanRenew.checked = false;
     loanRenew.disabled = false;
   } else {
     loanLeaked.disabled = true;
@@ -164,7 +164,7 @@ function calculatePMT(event) {
   var resultEl = document.getElementById("result");
   resultEl.textContent = isNaN(pmt)
     ? "برجاء مراجعة البيانات"
-    : numberFormatter.format(pmt.toFixed(0)) + " جنيه";
+    : numberFormatter.format(Math.ceil(pmt)) + " جنيه";
 
   // حساب رسوم طلب القرض
   var resultFee = document.getElementById("fees");
@@ -216,7 +216,7 @@ function calculatePayment(loanAmount, interestRate, term) {
       interestRate = interestValue.microLecked[0];
     } else {
       // console.log(interestValue);
-      if (loanAmount < 10000) {
+      if (loanAmount <= 10000) {
         interestRate = interestValue.micro[0];
       } else if (loanAmount >= 10000 && loanAmount <= 50000) {
         interestRate = interestValue.micro[1];
