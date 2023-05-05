@@ -1,27 +1,31 @@
 // Interest Values
 let interestValue = {
+  specialOffer: [
+    true, // special offer state active or not
+    22, // from 0 to 10,000
+  ],
   micro: [
-    38.275, //from 0 to 9,500
-    46, //from 10,000 to 50,000
-    46, // from 51,000 to 100,000
-    37.5, // from 101,000 to 200,000
-    37.5, // from 201,000 to 500,00
-    36, // from 501,000 to 1,000,000
-    35, // from 1,001,000 to 1,500,000
-    34, // from 1,501,000 to 2,000,000
-    33, // 2,000,000 and above
+    49, //from 0 to 9,500
+    49, //from 10,000 to 50,000
+    49, // from 51,000 to 100,000
+    40.5, // from 101,000 to 200,000
+    38.5, // from 201,000 to 500,00
+    37, // from 501,000 to 1,000,000
+    36, // from 1,001,000 to 1,500,000
+    35, // from 1,501,000 to 2,000,000
+    34, // 2,000,000 and above
   ],
   microRenew: [
     // for clients who will renew in 7 days of old loan
-    46, //from 0 to 9,500
-    46, //from 10,000 to 50,000
-    46, //from 51,000 to 100,000
+    49, //from 0 to 9,500
+    49, //from 10,000 to 50,000
+    49, //from 51,000 to 100,000
   ],
   microLecked: [
     // for leaked client who did not renew in 60 days
-    46, //from 0 to 9,500
-    46, //from 10,000 to 50,000
-    46, //from 51,000 to 100,000
+    49, //from 0 to 9,500
+    49, //from 10,000 to 50,000
+    49, //from 51,000 to 100,000
   ],
   consume: [
     52, // from outsider sellers
@@ -127,7 +131,7 @@ function calculatePMT(event) {
     }
   }
 
-  //editing value of interst
+  //editing state of interst
   if (loanAmount <= 100000 && loanAmount > 10000) {
     loanLeaked.disabled = false;
     loanRenew.disabled = false;
@@ -137,13 +141,9 @@ function calculatePMT(event) {
     loanRenew.checked = false;
   }
   // disable input value to remove double check
-  if (loanRenew.checked) {
-    loanLeaked.checked = false;
-    loanLeaked.attributes.disabled;
-  } else if (loanLeaked.checked) {
-    loanRenew.checked = false;
-    loanRenew.attributes.disabled;
-  }
+  loanRenew.checked
+    ? (loanLeaked.checked = false)
+    : (loanRenew.checked = false);
 
   if (loanHalan.checked) {
     loanEmployee.checked = false;
@@ -193,11 +193,6 @@ function calculatePMT(event) {
     : numberFormatter.format(totalInterst + loanAmount) + " جنيه";
 }
 
-// isNaN(totalInterst) ? console.log("yes yes") : "";
-// function calculateRate(interestRate){
-
-// }
-
 function calculatePayment(loanAmount, interestRate, term) {
   let loanType = document.getElementById("loan-type").value;
   if (loanType == "consume") {
@@ -217,7 +212,9 @@ function calculatePayment(loanAmount, interestRate, term) {
     } else {
       // console.log(interestValue);
       if (loanAmount <= 10000) {
-        interestRate = interestValue.micro[0];
+        interestValue.specialOffer[0]
+          ? (interestRate = interestValue.specialOffer[1])
+          : interestValue.micro[0];
       } else if (loanAmount >= 10000 && loanAmount <= 50000) {
         interestRate = interestValue.micro[1];
       } else if (loanAmount > 50000 && loanAmount <= 100000) {
@@ -228,14 +225,23 @@ function calculatePayment(loanAmount, interestRate, term) {
         interestRate = interestValue.micro[4];
       } else if (loanAmount > 500000 && loanAmount <= 1000000) {
         interestRate = interestValue.micro[5];
-      } else {
+      } else if (loanAmount > 1000000 && loanAmount <= 1500000) {
         interestRate = interestValue.micro[6];
+      } else if (loanAmount > 1500000 && loanAmount <= 2000000) {
+        interestRate = interestValue.micro[7];
+      } else {
+        interestRate = interestValue.micro[8];
       }
     }
   }
   var months = term;
   var monthlyRate = interestRate / 100 / 12;
-  var payment =
-    loanAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)));
+  if (loanAmount <= 10000 || loanType == "sesonal") {
+    var payment = (loanAmount * (1 + monthlyRate * months)) / months;
+  } else {
+    var payment =
+      loanAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -months)));
+  }
+
   return payment;
 }

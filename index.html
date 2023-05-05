@@ -34,6 +34,7 @@
               <option value="micro">متناهى الصغر</option>
               <option value="small">صغيرة ومتوسطة</option>
               <option value="consume">استهلاكى</option>
+              <!-- <option value="seasonal">موسمى</option> -->
             </select>
             <p id="loan-type2"></p>
 
@@ -58,7 +59,7 @@
               id="amount-slider"
             />
 
-            <label class="fs-5 mt-3" for="term">مدة القرض ( بالشهر )</label>
+            <label class="fs-5 mt-3" for="term">عدد الأقساط</label>
             <input
               class="w-50 rounded-4 mb-2 form-control form-control-sm"
               type="number"
@@ -98,15 +99,18 @@
 
               <!-- ** hiding it as it is disabled ** -->
 
-              <div class="d-none justify-content-between">
+              <div
+                class="d-none justify-content-between form-check form-switch"
+              >
                 <label class="fs-5 my-auto" for="loan-leaked"
-                  >العميل متسرب:</label
+                  >عميل متسرب:</label
                 >
                 <input
-                  class="ms-5"
+                  class="ms-1 form-check-input"
                   type="checkbox"
                   id="loan-leaked"
                   name="loan-leaked"
+                  role="switch"
                 />
               </div>
             </div>
@@ -174,7 +178,10 @@
           <li>يوجد رسوم استعلام اضافية = 12 جنيه لكل فرد "عميل او ضامن"</li>
           <li>تختلف نسبة الرسوم فى عرض التجديد فقط من 3% الى 1.5%</li>
           <li>عرض التجديد يسرى حتى مبلغ 100,000 جنيه فقط</li>
-          <li>يوجد عرض للمبالغ حتى 10,000 جنيه بفائدة اقل و رسوم = 2%</li>
+          <li>
+            يوجد عرض للمبالغ حتى 10,000 جنيه بفائدة اقل و رسوم 2% (لا تشمل القرض
+            المستفل)
+          </li>
         </ol>
       </div>
       <hr />
