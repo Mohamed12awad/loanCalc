@@ -32,6 +32,7 @@ let interestValue = {
     48, // from halan app
     37.7, // loan for employees
   ],
+  seasonal: [49],
 };
 // const slider = document.getElementById("slider");
 document.querySelector(".state-consume").style.height = "0";
@@ -86,14 +87,15 @@ function calculatePMT(event) {
   let loanAmount = parseFloat(document.getElementById("loan-amount").value);
   var term = parseInt(document.getElementById("term").value);
 
-  //editing value of interst
-
+  //editing layout
   if (loanType === "consume") {
     document.querySelector(".fees").style.display = "none";
     document.querySelector(".total").style.display = "none";
     document.querySelector(".pmt").style.gridColumn = "1/3";
     document.querySelector(".state-micro").style.height = "0";
     document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.height = "0";
     document.querySelector(".state-consume").style.height = "auto";
     document.querySelector(".state-consume").style.opacity = "100";
   } else if (loanType === "small") {
@@ -102,20 +104,38 @@ function calculatePMT(event) {
     document.querySelector(".pmt").style.gridColumn = "1/2";
     document.querySelector(".state-micro").style.height = "0";
     document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.height = "0";
     document.querySelector(".state-consume").style.height = "0";
     document.querySelector(".state-consume").style.opacity = "0";
+  } else if (loanType === "seasonal") {
+    document.querySelector(".fees").style.display = "block";
+    document.querySelector(".total").style.display = "none";
+    document.querySelector(".pmt").style.gridColumn = "1/2";
+    document.querySelector(".state-micro").style.height = "0";
+    document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-consume").style.height = "0";
+    document.querySelector(".state-consume").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.opacity = "100";
+    document.querySelector(".state-seasonal").style.height = "auto";
   } else {
     document.querySelector(".fees").style.display = "block";
     document.querySelector(".total").style.display = "block";
     document.querySelector(".pmt").style.gridColumn = "1/2";
     document.querySelector(".state-micro").style.height = "auto";
     document.querySelector(".state-micro").style.opacity = "100";
+    document.querySelector(".state-seasonal").style.opacity = "0";
+    document.querySelector(".state-seasonal").style.height = "0";
     document.querySelector(".state-consume").style.height = "0";
     document.querySelector(".state-consume").style.opacity = "0";
   }
 
   // Calculate PMT
-  var pmt = calculatePayment(loanAmount, interestRate, term);
+  if (loanType === "seasonal") {
+    var pmt = calculateSeasonalPayment(loanAmount, interestRate, term);
+  } else {
+    var pmt = calculatePayment(loanAmount, interestRate, term);
+  }
 
   // Calculate Fees
   var feesPercentage;
@@ -124,7 +144,10 @@ function calculatePMT(event) {
   } else {
     if (loanAmount > 200000 || loanRenew.checked) {
       feesPercentage = 0.015; // fees for small & medium
-    } else if (loanAmount <= 10000) {
+    } else if (
+      loanAmount <= 10000 &&
+      (loanType == "micro" || loanType == "small")
+    ) {
       feesPercentage = 0.02;
     } else {
       feesPercentage = 0.03; // fees for micro
@@ -155,7 +178,14 @@ function calculatePMT(event) {
 
   var fees = loanAmount * feesPercentage;
   // Calculate Fixed interst
-  var totalInterst = pmt.toFixed(0) * term - loanAmount;
+  if (loanType === "seasonal") {
+    var totalInterst = Math.round(pmt - loanAmount);
+  } else {
+    var totalInterst = Math.round(pmt * term - loanAmount);
+  }
+
+  // PrinciplePlusInterst
+  let PrinciplePlusInterst = loanAmount + totalInterst;
 
   // Comma As Thousand Separator
   const numberFormatter = Intl.NumberFormat("ar-EG");
@@ -164,7 +194,7 @@ function calculatePMT(event) {
   var resultEl = document.getElementById("result");
   resultEl.textContent = isNaN(pmt)
     ? "برجاء مراجعة البيانات"
-    : numberFormatter.format(Math.ceil(pmt)) + " جنيه";
+    : numberFormatter.format(Math.round(pmt)) + " جنيه";
 
   // حساب رسوم طلب القرض
   var resultFee = document.getElementById("fees");
@@ -190,7 +220,8 @@ function calculatePMT(event) {
   );
   resultPrinciplePlusInterst.textContent = isNaN(totalInterst + loanAmount)
     ? "برجاء مراجعة البيانات"
-    : numberFormatter.format(totalInterst + loanAmount) + " جنيه";
+    : numberFormatter.format(PrinciplePlusInterst) + " جنيه";
+  // console.log(days);
 }
 
 function calculatePayment(loanAmount, interestRate, term) {
@@ -214,7 +245,7 @@ function calculatePayment(loanAmount, interestRate, term) {
       if (loanAmount <= 10000) {
         interestValue.specialOffer[0]
           ? (interestRate = interestValue.specialOffer[1])
-          : interestValue.micro[0];
+          : (interestRate = interestValue.micro[0]);
       } else if (loanAmount >= 10000 && loanAmount <= 50000) {
         interestRate = interestValue.micro[1];
       } else if (loanAmount > 50000 && loanAmount <= 100000) {
@@ -236,7 +267,8 @@ function calculatePayment(loanAmount, interestRate, term) {
   }
   var months = term;
   var monthlyRate = interestRate / 100 / 12;
-  if (loanAmount <= 10000 || loanType == "sesonal") {
+
+  if (loanAmount <= 10000 && (loanType == "micro" || loanType == "small")) {
     var payment = (loanAmount * (1 + monthlyRate * months)) / months;
   } else {
     var payment =
@@ -244,4 +276,32 @@ function calculatePayment(loanAmount, interestRate, term) {
   }
 
   return payment;
+}
+
+function calculateSeasonalPayment(loanAmount, interestRate, term) {
+  var days = document.querySelector('input[name="days"]:checked').value;
+  var calcmethod = document
+    .querySelector('input[name="days"]:checked')
+    .getAttribute("data-calcmethod");
+  // console.log(
+  //   document
+  //     .querySelector('input[name="days"]:checked')
+  //     .getAttribute("data-calcmethod")
+  // );
+  interestRate = interestValue.seasonal[0];
+  var months = term;
+  if (calcmethod === "days") {
+    let dailyInterst = interestRate / 100 / 365;
+    var seasonalPayment = loanAmount * (1 + dailyInterst * days);
+  } /*else { // to be continued
+    var monthlyRate = interestRate / 100;
+    const endingBalance =
+      loanAmount * Math.pow(1 + monthlyRate / 4, 4 * months);
+    const interest = endingBalance - loanAmount;
+    var seasonalPayment = interest;
+    // (loanAmount * (1 + monthlyRate * days)) / months;
+
+    console.log(calcmethod);
+  }*/
+  return seasonalPayment;
 }

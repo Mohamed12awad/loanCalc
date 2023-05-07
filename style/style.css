@@ -75,6 +75,16 @@ input[type="checkbox"] {
   z-index: 100;
   position: relative;
 }
+.state-seasonal {
+  z-index: 101;
+  opacity: 0;
+  height: 0;
+  position: relative;
+}
+.form-check-input:checked {
+  border-color: #81bd41;
+  background-color: #81bd41;
+}
 .result-section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

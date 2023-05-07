@@ -34,7 +34,7 @@
               <option value="micro">متناهى الصغر</option>
               <option value="small">صغيرة ومتوسطة</option>
               <option value="consume">استهلاكى</option>
-              <!-- <option value="seasonal">موسمى</option> -->
+              <option value="seasonal">موسمى</option>
             </select>
             <p id="loan-type2"></p>
 
@@ -146,6 +146,70 @@
                 />
               </div>
             </div>
+
+            <!-- changing the state of a consume loan halan or outside or employees -->
+            <div class="state-seasonal">
+              <label class="form-check fs-5"> قسط واحد </label>
+              <div class="single px-4">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="days"
+                    id="flexRadioDefault1"
+                    data-calcmethod="days"
+                    value="45"
+                  />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    45 يوم
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="days"
+                    id="flexRadioDefault2"
+                    data-calcmethod="days"
+                    value="60"
+                  />
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    60 يوم
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="days"
+                    id="flexRadioDefault3"
+                    data-calcmethod="days"
+                    value="75"
+                  />
+                  <label class="form-check-label" for="flexRadioDefault3">
+                    75 يوم
+                  </label>
+                </div>
+              </div>
+              <!--  
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  title="every 3 months"
+                  type="radio"
+                  name="days"
+                  data-calcmethod="months"
+                  id="flexRadioDefault4"
+                  value="3"
+                />
+                <label class="form-check-label" for="flexRadioDefault1">
+                  كل ثلاثة اشهر
+                </label>
+              </div>
+              
+              -->
+            </div>
           </form>
         </div>
         <!-- start the result section -->
@@ -165,9 +229,6 @@
               مجموع المدفوعات (مبلغ التمويل + الفائدة):
               <span id="principlePlusInterst"></span>
             </div>
-            <!-- <div class="result">
-              نسبة الفائدة الثابتة: <span id="fixedInterst"></span>
-            </div> -->
           </div>
         </div>
       </div>
@@ -190,7 +251,7 @@
       <div>
         <p class="text-center fw-bold text-capitalize">
           developed by
-          <a href="https://www.facebook.com/Mohamed12awad/"
+          <a href="https://github.com/Mohamed12awad"
             >mohamed awad abdelmaqsoud</a
           >
           <a class="d-block" href="https://wa.me/+01287131456"
