@@ -1,7 +1,7 @@
 // Interest Values
 let interestValue = {
   specialOffer: [
-    true, // special offer state active or not
+    false, // special offer state active or not
     22, // from 0 to 10,000
   ],
   micro: [
@@ -73,7 +73,7 @@ loanType.addEventListener("input", () => {
     amountSlider.setAttribute("step", "10000");
   } else {
     amountSlider.setAttribute("min", "3000");
-    amountSlider.setAttribute("max", "200000");
+    amountSlider.setAttribute("max", "220000");
     amountSlider.setAttribute("step", "1000");
   }
 });
@@ -114,8 +114,8 @@ function calculatePMT(event) {
     document.querySelector(".fees").style.display = "block";
     document.querySelector(".total").style.display = "none";
     document.querySelector(".pmt").style.gridColumn = "1/2";
-    document.querySelector(".state-micro").style.height = "0";
-    document.querySelector(".state-micro").style.opacity = "0";
+    document.querySelector(".state-micro").style.height = "auto";
+    document.querySelector(".state-micro").style.opacity = "100";
     document.querySelector(".state-consume").style.height = "0";
     document.querySelector(".state-consume").style.opacity = "0";
     document.querySelector(".state-seasonal").style.opacity = "100";
@@ -146,20 +146,20 @@ function calculatePMT(event) {
   if (loanType === "consume") {
     feesPercentage = 0;
   } else {
-    if (loanAmount > 200000 || loanRenew.checked) {
+    if (loanAmount > 220000 || loanRenew.checked) {
       feesPercentage = 0.015; // fees for small & medium
     } else if (
       loanAmount <= 10000 &&
       (loanType == "micro" || loanType == "small")
     ) {
-      feesPercentage = 0.02;
+      feesPercentage = 0.03;
     } else {
       feesPercentage = 0.03; // fees for micro
     }
   }
 
   //editing state of interst
-  if (loanAmount <= 100000 && loanAmount > 10000) {
+  if (loanAmount <= 100000) {
     loanLeaked.disabled = false;
     loanRenew.disabled = false;
   } else {
@@ -259,9 +259,9 @@ function calculatePayment(loanAmount, interestRate, term) {
         interestRate = interestValue.micro[1];
       } else if (loanAmount > 50000 && loanAmount <= 100000) {
         interestRate = interestValue.micro[2];
-      } else if (loanAmount > 100000 && loanAmount <= 200000) {
+      } else if (loanAmount > 100000 && loanAmount <= 220000) {
         interestRate = interestValue.micro[3];
-      } else if (loanAmount > 200000 && loanAmount <= 500000) {
+      } else if (loanAmount > 220000 && loanAmount <= 500000) {
         interestRate = interestValue.micro[4];
       } else if (loanAmount > 500000 && loanAmount <= 1000000) {
         interestRate = interestValue.micro[5];
@@ -277,7 +277,11 @@ function calculatePayment(loanAmount, interestRate, term) {
   var months = term;
   var monthlyRate = interestRate / 100 / 12;
 
-  if (loanAmount <= 10000 && (loanType == "micro" || loanType == "small")) {
+  if (
+    loanAmount <= 10000 &&
+    interestValue.specialOffer[0] &&
+    (loanType == "micro" || loanType == "small")
+  ) {
     var payment = (loanAmount * (1 + monthlyRate * months)) / months;
   } else {
     var payment =
@@ -288,12 +292,17 @@ function calculatePayment(loanAmount, interestRate, term) {
 }
 
 function calculateSeasonalPayment(loanAmount, interestRate, term) {
+  // try {
   var season = document.querySelector('input[name="season"]:checked').value;
+  // } catch (err) {
+  //   message.innerHTML = "Input is " + err;
+  // }
   var calcmethod = document
     .querySelector('input[name="season"]:checked')
     .getAttribute("data-calcmethod");
   interestRate = interestValue.seasonal[0];
   var months = term;
+
   if (calcmethod === "days") {
     let dailyRate = interestRate / 100 / 365;
     var seasonalPayment =
