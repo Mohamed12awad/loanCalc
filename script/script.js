@@ -185,8 +185,10 @@ function calculatePMT(event) {
   if (
     loanType == "seasonal" &&
     document
-      .querySelector('input[name="season"]:checked')
-      .getAttribute("data-calcmethod") === "days"
+      .getElementById("state-seasonal")
+      .options[
+        document.getElementById("state-seasonal").selectedIndex
+      ].getAttribute("data-calcmethod") === "days"
   ) {
     var totalInterst = Math.round(pmt - loanAmount);
   } else {
@@ -293,13 +295,16 @@ function calculatePayment(loanAmount, interestRate, term) {
 
 function calculateSeasonalPayment(loanAmount, interestRate, term) {
   // try {
-  var season = document.querySelector('input[name="season"]:checked').value;
+  var seasonal = document.getElementById("state-seasonal");
+  var season = seasonal.value;
   // } catch (err) {
   //   message.innerHTML = "Input is " + err;
   // }
   var calcmethod = document
-    .querySelector('input[name="season"]:checked')
-    .getAttribute("data-calcmethod");
+    .getElementById("state-seasonal")
+    .options[
+      document.getElementById("state-seasonal").selectedIndex
+    ].getAttribute("data-calcmethod");
   interestRate = interestValue.seasonal[0];
   var months = term;
 

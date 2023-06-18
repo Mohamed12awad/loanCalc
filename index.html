@@ -47,6 +47,7 @@
               min="0"
               step="1000"
               max="2000000"
+              placeholder="قيمة التمويل"
               required
             />
             <input
@@ -68,6 +69,7 @@
               min="1"
               step="1"
               value="12"
+              placeholder="عدد دفعات السداد"
               required
             />
             <input
@@ -147,9 +149,43 @@
               </div>
             </div>
 
-            <!-- changing the state of a consume loan halan or outside or employees -->
+            <!-- choosing the period of payment -->
             <div class="state-seasonal">
-              <label class="form-check fs-5"> قسط واحد بعد</label>
+              <label for="state-seasonal" class="fs-5 mt-3">مدة السداد: </label>
+              <select
+                name="loan-type"
+                id="state-seasonal"
+                class="form-select form-check"
+              >
+                <optgroup label="قسط واحد">
+                  <option value="45" data-calcmethod="days" name="season">
+                    قسط واحد بعد 45 يوم
+                  </option>
+                  <option value="60" data-calcmethod="days" name="season">
+                    قسط واحد بعد 60 يوم
+                  </option>
+                  <option value="75" data-calcmethod="days" name="season">
+                    قسط واحد بعد 75 يوم
+                  </option>
+                </optgroup>
+                <optgroup label="اقساط متعددة">
+                  <label>اقساط متعددة</label>
+                  <option value="3" data-calcmethod="months" name="season">
+                    قسط كل ثلاثة أشهر
+                  </option>
+                  <option value="4" data-calcmethod="months" name="season">
+                    قسط كل اربعة أشهر
+                  </option>
+                  <option value="5" data-calcmethod="months" name="season">
+                    قسط كل خمسة أشهر
+                  </option>
+                  <option value="6" data-calcmethod="months" name="season">
+                    قسط كل ستة أشهر
+                  </option>
+                </optgroup>
+              </select>
+
+              <!-- <label class="form-check fs-5"> قسط واحد بعد</label>
               <div class="single px-4">
                 <div class="form-check">
                   <input
@@ -254,7 +290,7 @@
                 >
                   قسط كل ستة أشهر
                 </label>
-              </div>
+              </div> -->
             </div>
           </form>
         </div>
